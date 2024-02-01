@@ -4,10 +4,14 @@ import com.scalerLearning.blogging_app.users.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Created by Jagadesh Narayanaswamy on 01/02/24.
  * Author comment: Users Repository
  */
+
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    Optional<UserEntity> findByUsername(String username);
 }

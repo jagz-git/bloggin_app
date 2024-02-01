@@ -12,8 +12,10 @@ import org.springframework.lang.Nullable;
 @Entity(name = "users")
 @Getter
 @Setter
+@Builder
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserEntity {
     @Id
@@ -21,19 +23,19 @@ public class UserEntity {
     @Column(nullable = false)
     private Long id;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     @NonNull
     private String username;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     @NonNull
     private String email;
 
-    @Column( nullable = true)
+    @Column(nullable = true)
     @Nullable
     private String bio;
 
-    @Column( nullable = true)
+    @Column(nullable = true)
     private String image;
 
 }
