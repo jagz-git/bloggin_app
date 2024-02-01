@@ -1,0 +1,13 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: jdbc:h2:file:./blog_app
+#    username: sa
+#    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create # in prod, need to use update, not create
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
