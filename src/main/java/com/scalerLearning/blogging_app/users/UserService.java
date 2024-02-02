@@ -1,6 +1,8 @@
 package com.scalerLearning.blogging_app.users;
 
 import com.scalerLearning.blogging_app.exception.UserNotFoundException;
+import com.scalerLearning.blogging_app.users.dto.CreateUserRequest;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,9 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    ModelMapper modelMapper;
+
     public UserEntity createUser(String username, String password, String email
     ) {
         var newUser = UserEntity.builder()
@@ -22,6 +27,18 @@ public class UserService {
 //                .password(password) //TODO: encrypt password
                 .email(email)
                 .build();
+        return userRepository.save(newUser);
+    }
+
+    //    with DTO
+    public UserEntity createUserWithDTO(CreateUserRequest createUserRequest) {
+        UserEntity newUser = modelMapper.map(createUserRequest, UserEntity.class);
+//        TODO: encrypt password and save
+        /*var newUser = UserEntity.builder()
+                .username(createUserRequest.getUsername())
+//                .password(password) //TODO: encrypt password
+                .email(createUserRequest.getEmail())
+                .build();*/
         return userRepository.save(newUser);
     }
 
@@ -40,4 +57,3 @@ public class UserService {
     }
 
 }
-
