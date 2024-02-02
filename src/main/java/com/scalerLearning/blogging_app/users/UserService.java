@@ -1,15 +1,19 @@
 package com.scalerLearning.blogging_app.users;
 
+import com.scalerLearning.blogging_app.exception.InvalidCredentialsException;
 import com.scalerLearning.blogging_app.exception.UserNotFoundException;
+import com.scalerLearning.blogging_app.security.JWTService;
 import com.scalerLearning.blogging_app.users.dto.CreateUserRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
  * Created by Jagadesh Narayanaswamy on 01/02/24.
  * Author comment: Service class
  */
+
 
 @Service
 public class UserService {
@@ -19,6 +23,10 @@ public class UserService {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
 
     public UserEntity createUser(String username, String password, String email
     ) {
@@ -33,7 +41,8 @@ public class UserService {
     //    with DTO
     public UserEntity createUserWithDTO(CreateUserRequest createUserRequest) {
         UserEntity newUser = modelMapper.map(createUserRequest, UserEntity.class);
-//        TODO: encrypt password and save
+        newUser.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
+
         /*var newUser = UserEntity.builder()
                 .username(createUserRequest.getUsername())
 //                .password(password) //TODO: encrypt password
@@ -52,7 +61,10 @@ public class UserService {
 
     public UserEntity loginUser(String username, String password) {
         var user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
-//        TODO: check password
+        var passwordMatch = passwordEncoder.matches(password, user.getPassword());
+        if (!passwordMatch) {
+            throw new InvalidCredentialsException();
+        }
         return user;
     }
 
